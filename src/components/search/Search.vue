@@ -1,37 +1,45 @@
 <script setup>
-import SearchToolBar from './SearchToolBar.vue'
-import SearchList from './SearchList.vue'
-import { reactive, ref } from 'vue';
 import { computed } from '@vue/reactivity';
-import { def } from '@vue/shared';
-import { onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import SearchList from './SearchList.vue';
+import SearchToolBar from './SearchToolBar.vue';
+import SearchItem from './SearchItem.vue'
 
 let items = ref([])
 let searchQuery = ref('');
-const updateSearchQuery = (searchTerm) => searchQuery.value = searchTerm;
+let relevantItems = ref([])
+
+watch(searchQuery, async () => {
+    if (searchQuery.value) {
+        relevantItems.value = items.value.filter(item => (item.fullName || '').toLocaleLowerCase().includes(searchQuery.value.toLocaleLowerCase()))
+        return;
+    }
+    relevantItems.value = items.value;
+})
+
+watch(items, async () => {
+    relevantItems.value = items.value;
+})
 
 onMounted(() => {
     getItems();
 })
 
-let relevantItems = computed(() => {
-    if (searchQuery.value) {
-        return items.value.filter(item => (item.fullName || '').toLocaleLowerCase().includes(searchQuery.value.toLocaleLowerCase()))
-    }
-    return items.value;
-})
+const updateSearchQuery = (searchTerm) => searchQuery.value = searchTerm;
 
 async function getItems() {
-    try {
-        const people = await fetch('/mock-data/people.json')
-        items.value = formatData((await people.json()).slice(0, 50));
-    } catch {
-        console.error("Something happened")
-    }
+    return new Promise((resolve) => {
+        setTimeout(async () => {
+            const people = await fetch('/mock-data/people.json')
+            items.value = formatData((await people.json()));
+            return Promise.resolve();
+        }, 0)
+    })
 }
 
 function formatData(data) {
     return data.map(item => {
+        item.key = Math.random() * data.length
         item.DOB = new Date(item.DOB).toDateString();
         return item;
     })
@@ -41,8 +49,10 @@ function formatData(data) {
 
 <template>
     <div class="search-container">
+        items length [{{ relevantItems.length }}]
         <SearchToolBar @search-change="updateSearchQuery" />
-        <SearchList :items="relevantItems" />
+        <SearchList v-if="items.length > 0" :items="relevantItems" />
+        <v-progress-circular v-else indeterminate></v-progress-circular>
     </div>
 </template>
 
@@ -52,5 +62,9 @@ function formatData(data) {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.v-progress-circular {
+    width: 25px;
 }
 </style>

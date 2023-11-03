@@ -1,13 +1,32 @@
 <script setup>
-import { toRefs } from 'vue'
-defineProps(['item'])
+import { computed } from '@vue/reactivity';
+import { ref } from 'vue'
+
+const { item } = defineProps(['item'])
+
+const colorMap = new Map();
+colorMap.set('Applied', 'green')
+colorMap.set('In Progress', '#28456c')
+colorMap.set('Rejected', '#cf4040')
+
+const color = computed(() => {
+    return colorMap.get(item.status) ?? '#363333';
+})
 </script>
 
 <template>
     <div v-if="item">
-        <v-card width="400" :title="item.fullName" :subtitle="item.DOB" :text="item.status"></v-card>
+        <v-card width="400" :title="item.fullName" :subtitle="item.DOB">
+            <v-card-text>
+                <div class="status" :style="{ color }">{{ item.status }} </div>
+            </v-card-text>
+        </v-card>
     </div>
 </template>
 
 
-<style scoped></style>
+<style scoped>
+.status {
+    font-weight: bolder;
+}
+</style>

@@ -8,12 +8,16 @@ defineProps(['items'])
 
 <template>
     <div class="search-list-container">
-        <SearchItem v-for="item in items" :item="item" />
+        <v-virtual-scroll :items="items">
+            <template v-slot:default="{ item }">
+                <SearchItem :item="item" />
+            </template>
+        </v-virtual-scroll>
     </div>
 </template>
 
 <style scoped>
-.search-list-container {
+.search-list-container :deep(.v-virtual-scroll__container) {
     display: flex;
     flex-direction: column;
     gap: 8px;

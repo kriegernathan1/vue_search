@@ -13,6 +13,7 @@ import Search from './components/search/Search.vue'
 .app-container {
     width: 100vw;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 </style>
