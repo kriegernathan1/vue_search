@@ -8,7 +8,7 @@ defineProps(['items'])
 
 <template>
     <div class="search-list-container">
-        <v-virtual-scroll :items="items">
+        <v-virtual-scroll height="100vh" :items="items">
             <template v-slot:default="{ item }">
                 <SearchItem :item="item" />
             </template>

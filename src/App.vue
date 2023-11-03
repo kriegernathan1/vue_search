@@ -5,6 +5,7 @@ import Search from './components/search/Search.vue'
 
 <template>
     <div class="app-container">
+        <h1>People Search</h1>
         <Search />
     </div>
 </template>
@@ -13,7 +14,11 @@ import Search from './components/search/Search.vue'
 .app-container {
     width: 100vw;
     display: flex;
+    gap: 10px;
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
+    height: 100vh;
+    overflow: hidden;
 }
 </style>
