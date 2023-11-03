@@ -49,7 +49,6 @@ function formatData(data) {
 
 <template>
     <div class="search-container">
-        items length [{{ relevantItems.length }}]
         <SearchToolBar @search-change="updateSearchQuery" />
         <SearchList v-if="items.length > 0" :items="relevantItems" />
         <v-progress-circular v-else indeterminate></v-progress-circular>
