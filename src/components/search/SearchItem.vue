@@ -15,7 +15,7 @@ const color = computed(() => {
 </script>
 
 <template>
-    <div v-if="item">
+    <div v-if="item" :key="item.key">
         <v-card width="400" :title="item.fullName" :subtitle="item.DOB">
             <v-card-text>
                 <div class="status" :style="{ color }">{{ item.status }} </div>

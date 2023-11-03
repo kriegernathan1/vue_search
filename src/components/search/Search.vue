@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 import SearchList from './SearchList.vue';
 import SearchToolBar from './SearchToolBar.vue';
 import SearchItem from './SearchItem.vue'
@@ -39,7 +40,7 @@ async function getItems() {
 
 function formatData(data) {
     return data.map(item => {
-        item.key = Math.random() * data.length
+        item.key = uuidv4();
         item.DOB = new Date(item.DOB).toDateString();
         return item;
     })
