@@ -29,13 +29,8 @@ onMounted(() => {
 const updateSearchQuery = (searchTerm) => searchQuery.value = searchTerm;
 
 async function getItems() {
-    return new Promise((resolve) => {
-        setTimeout(async () => {
-            const people = await fetch('/mock-data/people.json')
-            items.value = formatData((await people.json()));
-            return Promise.resolve();
-        }, 0)
-    })
+    const people = await fetch('/mock-data/people.json')
+    items.value = formatData((await people.json()));
 }
 
 function formatData(data) {
